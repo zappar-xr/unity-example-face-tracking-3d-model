@@ -59,7 +59,15 @@ public class BuildScript : EditorWindow {
   }
 
   static string[] GetScenes () {
-    return EditorBuildSettings.scenes.Where (s => s.enabled).Select (s => s.path).ToArray ();
+        string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
+        if (scenes?.Length == 0)
+        {
+            //throw new System.Exception("No scenes found in build settings!");
+            Debug.Log("No scenes found! Adding available scenes from Assets/Scenes Dir");
+            AddScenesToBuild();
+            scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
+        }
+        return scenes;
   }
 
   static void AddScenesToBuild () {
